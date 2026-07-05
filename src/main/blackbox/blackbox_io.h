@@ -40,8 +40,21 @@ typedef enum {
 
 extern int32_t blackboxHeaderBudget;
 
+/*
+ * There are ~145 main fields. In the absolute mathematical worst-case where every single field 
+ * generates a 32-bit max integer, Variable Byte encoding uses 5 bytes per field. 
+ * 145 * 5 = 725 bytes theoretical max. So 1024 is the safest compile-time boundary.
+ */
+#define BLACKBOX_SERIAL_BUFFER_SIZE 1024
+extern uint8_t bbSerialBuffer[BLACKBOX_SERIAL_BUFFER_SIZE];
+extern uint32_t bbSerialBufferLen;
+extern bool bbIsSerialBufferActive;
+
 void blackboxOpen(void);
+void blackboxBeginWrite(void);
+void blackboxEndWrite(void);
 void blackboxWrite(uint8_t value);
+void blackboxWriteUnbuffered(uint8_t value);
 int blackboxWriteString(const char *s);
 
 void blackboxDeviceFlush(void);
