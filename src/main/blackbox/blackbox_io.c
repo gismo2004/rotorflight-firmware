@@ -61,9 +61,16 @@
 
 #define BLACKBOX_SERIAL_PORT_MODE MODE_TX
 
-uint8_t bbSerialBuffer[BLACKBOX_SERIAL_BUFFER_SIZE];
-uint32_t bbSerialBufferLen = 0;
-bool bbIsSerialBufferActive = false;
+/*
+ * There are ~145 main fields. In the absolute mathematical worst-case where every single field
+ * generates a 32-bit max integer, Variable Byte encoding uses 5 bytes per field.
+ * 145 * 5 = 725 bytes theoretical max. So 1024 is the safest compile-time boundary.
+ */
+#define BLACKBOX_SERIAL_BUFFER_SIZE 1024
+
+static uint8_t bbSerialBuffer[BLACKBOX_SERIAL_BUFFER_SIZE];
+static uint32_t bbSerialBufferLen = 0;
+static bool bbIsSerialBufferActive = false;
 
 // How many bytes can we transmit per loop iteration when writing headers?
 static uint8_t blackboxMaxHeaderBytesPerIteration;
