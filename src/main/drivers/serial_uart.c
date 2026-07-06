@@ -324,8 +324,8 @@ static void uartWriteBuf(serialPort_t *instance, const void *data, int count)
 
         if (freeSpace == 0) {
             // Start hardware and spin infinitely until space is available.
-            // That alignes with old fallback implementation but could lead to a locked FC 
-            // if hardware fails to drain data for whatever reason! 
+            // That aligns with old fallback implementation but could lead to a locked FC
+            // if hardware fails to drain data for whatever reason!
             uartStartTxHardware(uartPort);
             while ((freeSpace = uartTotalTxBytesFree(instance)) == 0) {
                 // Spin
