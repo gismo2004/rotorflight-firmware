@@ -484,6 +484,10 @@ void blackboxDeviceClose(void)
     switch (blackboxConfig()->device) {
     case BLACKBOX_DEVICE_SERIAL:
         // Can immediately close without attempting to flush any remaining data.
+        if (bbIsSerialBufferActive) {
+            serialEndWrite(blackboxPort);
+            bbIsSerialBufferActive = false;
+        }
         // Since the serial port could be shared with other processes, we have to give it back here
         closeSerialPort(blackboxPort);
         blackboxPort = NULL;
